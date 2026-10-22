@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E9EEF0">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<title>Fiszki</title>
+<style>
+:root{--bg:#E9EEF0;--card:#fff;--ink:#14262E;--mute:#5B6E76;--line:#CBD6DA;--blue:#1F5FBF;--blue-t:#DCE8F8;--ok:#1E7A4D;--ok-t:#DDF1E6;--bad:#B3372E;--bad-t:#F8E0DD;--amber:#E8A33D}
+@media(prefers-color-scheme:dark){:root{--bg:#10191D;--card:#1A272D;--ink:#E6EEF1;--mute:#93A6AE;--line:#2D3E45;--blue:#6FA3F0;--blue-t:#1D3150;--ok:#58C08A;--ok-t:#163626;--bad:#EE7B71;--bad-t:#40201D;--amber:#E8A33D}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+h1{font:700 1.6rem/1.2 Georgia,"Iowan Old Style",serif;margin:8px 0 18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.btn{display:block;width:100%;min-height:56px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-weight:600;font-size:1.05rem;margin:10px 0}
+:root:not([data-x]) .btn{color:#fff}
+@media(prefers-color-scheme:dark){.btn{color:#0B1620}}
+.btn.alt{background:var(--card);color:var(--ink);border:1.5px solid var(--line)}
+.btn[disabled]{opacity:.45}
+.boxes{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:0 0 20px}
+.bx{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:8px 4px 6px;text-align:center}
+.bx b{display:block;font-size:1.3rem}
+.bar{height:48px;margin:6px 8px;background:var(--bg);border-radius:6px;position:relative;overflow:hidden}
+.bar i{position:absolute;left:0;right:0;bottom:0;background:var(--amber)}
+.bx.n .bar i{background:var(--blue)}
+.bx.m .bar i{background:var(--ok)}
+.bx small{color:var(--mute);font-size:.72rem}
+.note{color:var(--mute);margin:6px 2px}
+.top{display:flex;justify-content:space-between;align-items:center;color:var(--mute);margin-bottom:14px}
+.top button{background:none;border:0;color:var(--mute);padding:10px 4px;font-size:1rem}
+.q{font:1.28rem/1.4 Georgia,"Iowan Old Style",serif;margin:6px 0 20px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;min-height:56px}
+.opt span.l{flex:none;width:28px;height:28px;border-radius:50%;background:var(--blue-t);color:var(--blue);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+.opt.ok{border-color:var(--ok);background:var(--ok-t)}
+.opt.ok span.l{background:var(--ok);color:var(--card)}
+.opt.bad{border-color:var(--bad);background:var(--bad-t)}
+.opt.bad span.l{background:var(--bad);color:var(--card)}
+.opt[disabled]{cursor:default}
+.fb{margin:14px 0 4px;padding:14px;border-radius:14px;background:var(--card);border-left:6px solid var(--line)}
+.fb.ok{border-left-color:var(--ok)}.fb.bad{border-left-color:var(--bad)}
+.fb h2{margin:0 0 6px;font-size:1.05rem}
+.fb p{margin:6px 0}
+.fb .sch{color:var(--mute);font-size:.9rem}
+.sticky{position:sticky;bottom:max(8px,env(safe-area-inset-bottom));padding-top:6px}
+details{margin-top:22px;border-top:1px solid var(--line);padding-top:10px}
+summary{padding:10px 0;color:var(--mute)}
+.big{font:700 2.6rem/1 Georgia,serif;margin:20px 0 6px}
+@media(prefers-reduced-motion:no-preference){.fb{animation:in .18s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style></head><body><main id="app"></main>
+<script>
+// ---- Ustawienia: odstępy powtórek (w minutach) po poprawnej odpowiedzi z pudełka 1..4 ----
+const WAIT=[10,1440,2880,4320];   // 10 min, 1 dzień, 2 dni, 3 dni
+const WRONG_WAIT=10;              // po błędzie: pudełko 1, powtórka za 10 min
+const REQUEUE_AFTER=3;            // błędne pytanie wraca w tej samej sesji po 3 innych
+const EXTRA_ROUND=10;             // rozmiar dodatkowej rundy
+// ----------------------------------------------------------------------------------------
+const KEY='fiszki-v1',app=document.getElementById('app');
+let Q=[],S=load(),queue=[],cur=null,order=[],ans=null,sess={ok:0,bad:0},fb=null;
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.p)return s}catch(e){}return{p:{},log:{}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const day=()=>new Date().toLocaleDateString('sv');
+function fmt(m){if(m<60)return m+' min';if(m<1440){const h=Math.round(m/60);return h+' godz.'}const d=Math.round(m/1440);return d===1?'1 dzień':d+' dni'}
+function dueIds(){const now=Date.now(),over=[],fresh=[];for(const q of Q){const p=S.p[q.id];if(!p)fresh.push(q.id);else if(p.d<=now)over.push([p.d,q.id])}over.sort((a,b)=>a[0]-b[0]);return over.map(x=>x[1]).concat(shuffle(fresh))}
+function nextDue(){const now=Date.now();let m=Infinity;for(const id in S.p)if(S.p[id].d>now)m=Math.min(m,S.p[id].d);return m}
+function wrongIds(){return Q.filter(q=>S.p[q.id]&&S.p[q.id].w>0).sort((a,b)=>S.p[b.id].w-S.p[a.id].w).map(q=>q.id)}
+function extraIds(){return Q.map(q=>q.id).sort((a,b)=>((S.p[a]?S.p[a].b+1:0)-(S.p[b]?S.p[b].b+1:0))||Math.random()-.5).slice(0,EXTRA_ROUND)}
+function start(ids){if(!ids.length)return;queue=ids.slice();sess={ok:0,bad:0};next()}
+function next(){if(!queue.length){done();return}const id=queue.shift();cur=Q.find(q=>q.id===id);order=shuffle(cur.answers.map((_,i)=>i));ans=null;fb=null;question()}
+function pick(i){if(ans!==null)return;ans=i;const ok=order[i]===cur.correct;const p=S.p[cur.id]||{b:0,d:0,w:0,n:0};p.n++;let wait,msg;
+ if(ok){wait=WAIT[p.b];p.b=Math.min(3,p.b+1);sess.ok++;msg='Pudełko '+(p.b+1)+', powtórka za '+fmt(wait)}
+ else{p.w++;p.b=0;wait=WRONG_WAIT;sess.bad++;queue.splice(Math.min(REQUEUE_AFTER,queue.length),0,cur.id);msg='Pudełko 1, to pytanie wróci w tej sesji'}
+ p.d=Date.now()+wait*60000;S.p[cur.id]=p;const l=S.log[day()]||(S.log[day()]={ok:0,bad:0});ok?l.ok++:l.bad++;save();fb={ok,msg};question()}
+function question(){const L='ABC';
+ app.innerHTML=`<div class="top"><span>Zostało: ${queue.length+(ans===null?1:0)}</span><button onclick="home()">Zakończ</button></div>
+ <p class="q">${esc(cur.question)}</p>
+ ${order.map((o,i)=>{let c='opt';if(ans!==null){if(o===cur.correct)c+=' ok';else if(i===ans)c+=' bad'}
+ return `<button class="${c}" ${ans!==null?'disabled':''} onclick="pick(${i})"><span class="l">${L[i]}</span><span>${esc(cur.answers[o])}</span></button>`}).join('')}
+ ${fb?`<div class="fb ${fb.ok?'ok':'bad'}"><h2>${fb.ok?'Dobrze':'Źle. Poprawna odpowiedź: '+L[order.indexOf(cur.correct)]}</h2><p>${esc(cur.explanation||'')}</p><p class="sch">${esc(fb.msg)}</p></div><div class="sticky"><button class="btn" onclick="next()">Dalej</button></div>`:''}`;
+ if(fb)window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'})}
+function done(){const t=sess.ok+sess.bad,pr=t?Math.round(100*sess.ok/t):0;
+ app.innerHTML=`<h1>Koniec rundy</h1><div class="big">${pr}%</div><p class="note">Poprawnych odpowiedzi: ${sess.ok} z ${t}</p><button class="btn" onclick="home()">Wróć</button>`}
+function home(){const total=Q.length,c=[0,0,0,0];let nw=0;for(const q of Q){const p=S.p[q.id];p?c[p.b]++:nw++}
+ const d=dueIds(),w=wrongIds(),nd=nextDue(),l=S.log[day()]||{ok:0,bad:0},lt=l.ok+l.bad;
+ const cell=(n,lab,cls)=>`<div class="bx ${cls}"><b>${n}</b><div class="bar"><i style="height:${total?100*n/total:0}%"></i></div><small>${lab}</small></div>`;
+ app.innerHTML=`<h1>Fiszki</h1>
+ <div class="boxes">${cell(nw,'Nowe','n')}${cell(c[0],'Pud. 1','')}${cell(c[1],'Pud. 2','')}${cell(c[2],'Pud. 3','')}${cell(c[3],'Pud. 4','m')}</div>
+ ${d.length?`<button class="btn" onclick="start(dueIds())">Ucz się (${d.length})</button>`
+ :`<p class="note">Na teraz wszystko zrobione.${nd<Infinity?' Następna powtórka za '+fmt(Math.max(1,Math.round((nd-Date.now())/60000)))+'.':''}</p>`}
+ <button class="btn alt" onclick="start(extraIds())">Dodatkowa runda (${Math.min(EXTRA_ROUND,total)})</button>
+ ${w.length?`<button class="btn alt" onclick="start(wrongIds())">Powtórz błędne (${w.length})</button>`:''}
+ <p class="note">${lt?`Dziś: ${lt} odpowiedzi, ${Math.round(100*l.ok/lt)}% poprawnych.`:'Dziś jeszcze bez odpowiedzi.'}</p>
+ <details><summary>Postępy i dane</summary>
+ <button class="btn alt" onclick="exp()">Zapisz postępy do pliku</button>
+ <button class="btn alt" onclick="document.getElementById('f').click()">Wczytaj postępy z pliku</button>
+ <input id="f" type="file" accept="application/json,.json" hidden onchange="imp(this)">
+ <button class="btn alt" onclick="reset()">Wyzeruj postępy</button></details>`}
+function exp(){const b=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='fiszki-postepy-'+day()+'.json';document.body.appendChild(a);a.click();a.remove()}
+function imp(el){const f=el.files[0];if(!f)return;f.text().then(t=>{const s=JSON.parse(t);if(!s||typeof s.p!=='object')throw 0;if(!confirm('Zastąpić obecne postępy wczytanymi?'))return;S={p:s.p,log:s.log||{}};save();home()}).catch(()=>alert('Nie udało się wczytać pliku z postępami.'))}
+function reset(){if(confirm('Na pewno wyzerować wszystkie postępy?')){S={p:{},log:{}};save();home()}}
+fetch('pytania.json').then(r=>r.json()).then(j=>{Q=j;home()}).catch(()=>{app.innerHTML='<h1>Fiszki</h1><p class="note">Nie udało się wczytać pliku pytania.json. Sprawdź, czy leży obok index.html i otwórz stronę ponownie z internetem.</p>'});
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
+</script></body></html>

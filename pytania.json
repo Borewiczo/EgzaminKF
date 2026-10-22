@@ -1,0 +1,314 @@
+[
+  {
+    "id": 0,
+    "category": "",
+    "question": "Czy czysty sygnał sinusoidalny 1000 Hz zawiera harmoniczne 2000 Hz i 3000 Hz?",
+    "answers": ["zawiera tylko 2000 Hz", "zawiera obie harmoniczne", "nie zawiera w ogóle harmonicznych"],
+    "correct": 2,
+    "explanation": "Czysta sinusoida zawiera tylko jedną częstotliwość (1000 Hz). Harmoniczne pojawiają się dopiero, gdy sygnał jest zniekształcony lub niesinusoidalny, np. prostokątny."
+  },
+  {
+    "id": 1,
+    "category": "",
+    "question": "Przy modulacji amplitudy AM szerokość kanału radiowego zależy od:",
+    "answers": ["najniższych częstotliwości modulujących", "amplitudy modulującego sygnału", "najwyższych częstotliwości modulujących"],
+    "correct": 2,
+    "explanation": "Szerokość pasma w AM to około dwukrotność najwyższej częstotliwości modulującej (dwie wstęgi boczne). Amplituda sygnału modulującego wpływa tylko na głębokość modulacji."
+  },
+  {
+    "id": 2,
+    "category": "",
+    "question": "Jak zmienia się impedancja dipola półfalowego, gdy obniżamy wysokość jego zawieszenia?",
+    "answers": ["rośnie", "maleje", "nie ulega zmianie"],
+    "correct": 1,
+    "explanation": "Im niżej zawieszony dipol, tym silniej oddziałuje na niego ziemia i tym mniejsza impedancja w punkcie zasilania (poniżej ok. 73 Ω dla dipola w wolnej przestrzeni)."
+  },
+  {
+    "id": 3,
+    "category": "",
+    "question": "Antena kierunkowa daje napięcie 4 razy większe, niż dipol półfalowy zawieszony w tym samym miejscu. Jaki zysk ma antena kierunkowa?",
+    "answers": ["6 dBd", "4 dBd", "12 dBd"],
+    "correct": 2,
+    "explanation": "Dla napięć na tym samym oporze: 20·log(4) ≈ 12 dB. Równoważnie napięcie 4 razy większe to moc 16 razy większa, a 10·log(16) ≈ 12 dB."
+  },
+  {
+    "id": 4,
+    "category": "",
+    "question": "Jakie długości fal zaliczamy do zakresu fal krótkich?",
+    "answers": ["od 100 m do 10 m", "od 80 m do 10 m", "od 160 m do 10 m"],
+    "correct": 0,
+    "explanation": "Fale krótkie (HF) to 100-10 m, czyli ok. 3-30 MHz. Pasma 80 m i 160 m to tylko pasma amatorskie, a nie granice zakresu."
+  },
+  {
+    "id": 5,
+    "category": "",
+    "question": "Co to jest strefa martwa na falach krótkich?",
+    "answers": ["strefa bez odbioru leżąca pomiędzy końcem fali przyziemnej a powrotem fali odbitej od jonosfery", "strefa bez odbioru z powodu dużych zakłóceń w mieście", "strefa w której brak odbioru z powodu interferencji fal przychodzących z różnych kierunków"],
+    "correct": 0,
+    "explanation": "Strefa martwa (strefa ciszy) to obszar, do którego fala przyziemna już nie dociera, a fala odbita od jonosfery jeszcze nie wraca na ziemię. Jej zasięg zależy m.in. od częstotliwości i stanu jonosfery."
+  },
+  {
+    "id": 6,
+    "category": "",
+    "question": "Początkujący krótkofalowiec sfrustrował się brakiem stacji w paśmie 24 MHz. Opiekun radiostacji klubowej zalecił mu przejście na „niższe” pasmo. Które pasmo powinien wybrać?",
+    "answers": ["10 m", "12 m", "20 m"],
+    "correct": 2,
+    "explanation": "24 MHz to pasmo 12 m. „Niższe” pasmo to niższa częstotliwość, czyli dłuższa fala: 20 m (ok. 14 MHz). 10 m (ok. 28 MHz) jest pasmem wyższym, a 12 m to to samo pasmo, na którym już jest."
+  },
+  {
+    "id": 7,
+    "category": "",
+    "question": "W emisji RTTY używane jest:",
+    "answers": ["kluczowanie amplitudy", "kluczowanie fazy", "kluczowanie częstotliwości"],
+    "correct": 2,
+    "explanation": "RTTY to kluczowanie częstotliwości (FSK): jedna częstotliwość to znak „mark”, druga (zwykle przesunięta o 170 Hz) to „space”."
+  },
+  {
+    "id": 8,
+    "category": "",
+    "question": "Która z podanych mocy PEP odpowiada napięciu maksymalnemu Umax = 100 V, zmierzonemu oscyloskopem na wyjściu nadajnika, na obciążeniu 50 omów (zakładamy sygnał sinusoidalny)?",
+    "answers": ["200 W", "100 W", "50 W"],
+    "correct": 1,
+    "explanation": "P = Umax²/(2·R) = 10000/100 = 100 W. Równoważnie: Uskut = 100/√2 ≈ 70,7 V, P = 70,7²/50 = 100 W."
+  },
+  {
+    "id": 9,
+    "category": "",
+    "question": "Warikap to:",
+    "answers": ["dioda mikrofalowa", "dioda pojemnościowa", "dioda stabilizacyjna"],
+    "correct": 1,
+    "explanation": "Warikap (waraktor) to dioda pojemnościowa: spolaryzowana zaporowo zmienia pojemność w zależności od napięcia, więc służy m.in. do strojenia obwodów rezonansowych (VFO)."
+  },
+  {
+    "id": 10,
+    "category": "",
+    "question": "Jak nazywa się przyrząd do pomiaru siły elektromotorycznej?",
+    "answers": ["omomierz", "woltomierz", "amperomierz"],
+    "correct": 1,
+    "explanation": "SEM to napięcie źródła (w stanie jałowym), mierzy się je woltomierzem. Omomierz mierzy rezystancję, a amperomierz natężenie prądu."
+  },
+  {
+    "id": 11,
+    "category": "",
+    "question": "Ferromagnetyki to materiały, których przenikalność magnetyczna jest:",
+    "answers": ["większa niż przenikalność magnetyczna powietrza", "mniejsza niż przenikalność magnetyczna powietrza", "równa przenikalności magnetycznej powietrza"],
+    "correct": 0,
+    "explanation": "Ferromagnetyki (żelazo, nikiel, kobalt) mają przenikalność wielokrotnie większą niż powietrze. Przenikalność mniejszą mają diamagnetyki, a bliską powietrzu paramagnetyki."
+  },
+  {
+    "id": 12,
+    "category": "",
+    "question": "Długość fali elektromagnetycznej rozchodzącej się w powietrzu wynosi 1500 metrów. Jaka jest częstotliwość tej fali?",
+    "answers": ["2 MHz", "200 kHz", "233 kHz"],
+    "correct": 1,
+    "explanation": "f = c/λ = 300 000 000 / 1500 = 200 000 Hz = 200 kHz. Skrót: f [MHz] = 300 / λ [m] = 300/1500 = 0,2 MHz."
+  },
+  {
+    "id": 13,
+    "category": "",
+    "question": "Opornik ma 200 Ω. Płynie przez niego prąd 300 mA. Jaka jest moc tracona w oporze?",
+    "answers": ["18 W", "1800 W", "1,8 W"],
+    "correct": 0,
+    "explanation": "P = I²·R, a 300 mA = 0,3 A, więc P = 0,09 · 200 = 18 W. Częsty błąd to brak zamiany mA na A."
+  },
+  {
+    "id": 14,
+    "category": "",
+    "question": "Jakie napięcie występuje na oporze 50 Ω przy dostarczeniu do niego mocy 200 W?",
+    "answers": ["100 V", "200 V", "50 V"],
+    "correct": 0,
+    "explanation": "Z P = U²/R wynika U = √(P·R) = √(200 · 50) = √10000 = 100 V."
+  },
+  {
+    "id": 15,
+    "category": "",
+    "question": "Częstotliwość pracy nadajnika amatorskiego wynosi 3,5714 MHz. Jaka jest przybliżona długość fali tego nadajnika?",
+    "answers": ["80 m", "40 m", "20 m"],
+    "correct": 0,
+    "explanation": "λ = 300 / f [MHz] = 300 / 3,5714 ≈ 84 m, czyli około 80 m (pasmo 80 m)."
+  },
+  {
+    "id": 16,
+    "category": "",
+    "question": "Zasilacz nadajnika dostarcza do stopnia końcowego nadajnika napięcie 20 V i prąd 5 A. Jaka jest sprawność energetyczna stopnia końcowego w %, jeżeli na wyjściu zmierzyliśmy moc PEP = 40 W?",
+    "answers": ["50 %", "40 %", "60 %"],
+    "correct": 1,
+    "explanation": "Moc pobierana: 20 V · 5 A = 100 W. Sprawność = moc wyjściowa / moc wejściowa = 40 / 100 = 40 %."
+  },
+  {
+    "id": 17,
+    "category": "",
+    "question": "Wartość amplitudy napięcia sinusoidalnego wynosi 200 V. Jaka jest wartość skuteczna tego napięcia?",
+    "answers": ["282,84 V", "115,6 V", "141,4 V"],
+    "correct": 2,
+    "explanation": "Wartość skuteczna = amplituda / √2 = 200 / 1,414 ≈ 141,4 V. 282,84 V to 200·√2 (błąd w drugą stronę), a 115,6 V to 200/√3."
+  },
+  {
+    "id": 18,
+    "category": "",
+    "question": "Dynamika jest:",
+    "answers": ["różnicą pomiędzy najsłabszym a najmocniejszym sygnałem", "miarą szybkości zmian amplitudy", "miarą szybkości nadawania znaków telegraficznych"],
+    "correct": 0,
+    "explanation": "Dynamika (np. odbiornika) to zakres między najsłabszym sygnałem, który można odebrać, a najmocniejszym, który jest jeszcze przetwarzany bez zniekształceń. Zwykle podaje się ją w dB."
+  },
+  {
+    "id": 19,
+    "category": "",
+    "question": "Uszkodzenie ekranu fidera antenowego może prowadzić do:",
+    "answers": ["nie prowadzi do żadnych negatywnych skutków", "wzrostu zakłóceń, bez względu na pogodę", "wzrostu zakłóceń i zmian impedancji kabla grożąca uszkodzeniem nadajnika"],
+    "correct": 2,
+    "explanation": "Uszkodzony ekran zwiększa zakłócenia (wnikające i wypromieniowywane) oraz zmienia impedancję falową kabla. Niedopasowanie i wysokie SWR mogą uszkodzić stopień końcowy nadajnika. Wilgoć wnikająca przez uszkodzenie dodatkowo pogarsza sprawę."
+  },
+  {
+    "id": 20,
+    "category": "",
+    "question": "Która wstęga boczna jest najczęściej używana w komunikacji głosowej w pasmach 160 m, 80 m oraz 40 m?",
+    "answers": ["górna wstęga boczna", "dolna wstęga boczna", "obie wstęgi boczne"],
+    "correct": 1,
+    "explanation": "Poniżej 10 MHz zwyczajowo używa się dolnej wstęgi bocznej (LSB), a od 20 m w górę górnej (USB). To konwencja, nie wymóg techniczny."
+  },
+  {
+    "id": 21,
+    "category": "",
+    "question": "Co oznacza wg kodu Q symbol QTC?",
+    "answers": ["wyłączam stację", "na jaką częstotliwość mam się przestroić", "mam dla ciebie pilną wiadomość"],
+    "correct": 2,
+    "explanation": "QTC: mam dla ciebie wiadomość (w pytaniu: czy masz dla mnie wiadomość?). QRT to wyłączam stację, QSY to przestrój się na inną częstotliwość."
+  },
+  {
+    "id": 22,
+    "category": "",
+    "question": "Co oznacza wg kodu Q symbol QSL?",
+    "answers": ["potwierdzam odbiór / przyślę kartę potwierdzającą łączność", "nadawaj szybciej", "słucham na częstotliwości"],
+    "correct": 0,
+    "explanation": "QSL: potwierdzam odbiór (w pytaniu: czy możesz potwierdzić odbiór?), w praktyce także karta potwierdzająca łączność. QRQ to nadawaj szybciej, QSX to nasłuchuję na częstotliwości."
+  },
+  {
+    "id": 23,
+    "category": "",
+    "question": "Który z poniższych kodów Q oznacza: Przejdź na częstotliwość, zmień częstotliwość?",
+    "answers": ["QSY", "QTR", "QSA"],
+    "correct": 0,
+    "explanation": "QSY: przestrój się na inną częstotliwość (lub zmieniam częstotliwość). QTR to dokładny czas, QSA to siła sygnału."
+  },
+  {
+    "id": 24,
+    "category": "",
+    "question": "Czy na częstotliwości 14,349 MHz wolno nadawać fonię z modulacją USB?",
+    "answers": ["wolno tylko w sytuacji kiedy słychać tam inną stację amatorską", "kategorycznie nie wolno", "wolno z mocą maksymalną 10 W"],
+    "correct": 1,
+    "explanation": "Pasmo 20 m kończy się na 14,350 MHz. Przy USB sygnał zajmuje ok. 2,7 kHz powyżej wskazywanej częstotliwości, więc nadając na 14,349 MHz wychodzi się poza pasmo, co jest niedozwolone."
+  },
+  {
+    "id": 25,
+    "category": "",
+    "question": "Czy Regulamin Radiokomunikacyjny reguluje zasady przyznawania znaków wywoławczych stacjom amatorskim?",
+    "answers": ["nie, regulują to tylko przepisy krajowe", "tak, Regulamin Radiokomunikacyjny określa ściśle zasady przyznawania znaków", "nie, znak wywoławczy obiera sobie sam operator stacji"],
+    "correct": 1,
+    "explanation": "Regulamin Radiokomunikacyjny ITU (art. 19) określa zasady tworzenia znaków wywoławczych i przydziela krajom serie międzynarodowe (prefiksy). Konkretne znaki nadaje administracja krajowa w ich ramach. Operator nie wybiera znaku sam."
+  },
+  {
+    "id": 26,
+    "category": "",
+    "question": "Czy na paśmie 40 m wolno nadawać modulacją USB?",
+    "answers": ["kategorycznie nie wolno", "Wolno z mocą maksymalną 10 W w określonych przepisami wycinkach tego pasma", "wolno, ale jest to praktykowane głównie w przypadku emisji cyfrowych"],
+    "correct": 2,
+    "explanation": "Używanie LSB poniżej 10 MHz to tylko zwyczaj, nie zakaz. USB jest dozwolone i stosowane głównie w emisjach cyfrowych (np. FT8). Ograniczenie do 10 W w wycinkach pasma nie istnieje."
+  },
+  {
+    "id": 27,
+    "category": "",
+    "question": "Kto określa maksymalną moc wyjściową stacji amatorskiej podawaną w pozwoleniu?",
+    "answers": ["międzynarodowy Związek Telekomunikacyjny (ITU)", "europejskie Biuro Radiokomunikacji (ERO)", "regulator krajowy"],
+    "correct": 2,
+    "explanation": "Moc w pozwoleniu określa regulator krajowy (w Polsce Prezes UKE, w ramach przepisów krajowych). ITU i ERO ustalają ramy i zalecenia międzynarodowe, ale nie wyznaczają konkretnych limitów dla stacji."
+  },
+  {
+    "id": 28,
+    "category": "",
+    "question": "Jaka organizacja reprezentuje służbę amatorską na forum międzynarodowym?",
+    "answers": ["międzynarodowy Związek Telekomunikacyjny (ITU)", "międzynarodowy Związek Radioamatorów (IARU)", "europejskie Biuro Radiokomunikacji (ERO)"],
+    "correct": 1,
+    "explanation": "IARU reprezentuje interesy służby amatorskiej wobec ITU i innych organizacji. Jego członkami są krajowe organizacje krótkofalowców (w Polsce PZK). ITU i ERO to organy regulacyjne."
+  },
+  {
+    "id": 29,
+    "category": "",
+    "question": "Jaka jest moc maksymalna wyjściowa stacji amatorskiej w przypadku pozwolenia kategorii 5?",
+    "answers": ["50 watów dla nadajnika poniżej 30 MHz a 15 watów dla nadajnika powyżej 30 MHz", "50 watów", "150 watów"],
+    "correct": 0,
+    "explanation": "Kategoria 5 dotyczy stacji bezobsługowych: 50 W dla częstotliwości do 30 MHz i 15 W powyżej 30 MHz. Sama odpowiedź „50 W” jest niepełna, bo pomija limit dla wyższych częstotliwości."
+  },
+  {
+    "id": 30,
+    "category": "",
+    "question": "Jaka jest maksymalna moc wyjściowa radiostacji w przypadku pozwolenia dodatkowego?",
+    "answers": ["500 watów", "1000 watów", "1500 watów"],
+    "correct": 2,
+    "explanation": "Pozwolenie dodatkowe (np. na zawody lub eksperyment techniczny) określa moc każdorazowo w pozwoleniu, ale nie więcej niż 1500 W. Dla porównania kategoria 1 to 500 W."
+  },
+  {
+    "id": 31,
+    "category": "",
+    "question": "Jakimi rodzajami emisji radiowych i z jaką mocą wolno pracować operatorowi w służbie amatorskiej w zakresie częstotliwości 135,7-137,8 kHz?",
+    "answers": ["wyłącznie emisją A1A (telegrafia) z mocą wyjściową 150 watów", "wszystkimi rodzajami emisji z mocą wyjściową 250 watów", "wyłącznie emisją A1A (telegrafia) z mocą 1 wat e.i.r.p. (równoważna moc promieniowana izotropowo)"],
+    "correct": 2,
+    "explanation": "W paśmie 2200 m obowiązuje limit 1 W e.i.r.p. Przy tak długiej fali typowe anteny są bardzo krótkie i mało skuteczne, dlatego limit podaje się jako e.i.r.p., a nie moc wyjściową nadajnika."
+  },
+  {
+    "id": 32,
+    "category": "",
+    "question": "Jaką maksymalną mocą może nadawać amatorska stacja bezobsługowa, pracująca w paśmie 10m?",
+    "answers": ["100 W", "15 W", "50 W"],
+    "correct": 2,
+    "explanation": "Stacja bezobsługowa to kategoria 5. Pasmo 10 m (28-29,7 MHz) leży poniżej 30 MHz, więc limit to 50 W. Limit 15 W dotyczy częstotliwości powyżej 30 MHz (2 m, 70 cm)."
+  },
+  {
+    "id": 33,
+    "category": "",
+    "question": "Zakres częstotliwości przeznaczony dla służby amatorskiej w paśmie 15 m to:",
+    "answers": ["21000 kHz - 21500 kHz", "21100 kHz - 21450 kHz", "21000 kHz - 21450 kHz"],
+    "correct": 2,
+    "explanation": "Pasmo 15 m dla służby amatorskiej to 21000-21450 kHz."
+  },
+  {
+    "id": 34,
+    "category": "",
+    "question": "Zakres częstotliwości przeznaczony dla służby amatorskiej w paśmie 10 m to:",
+    "answers": ["28500 kHz - 29800 kHz", "28000 kHz - 29500 kHz", "28000 kHz - 29700 kHz"],
+    "correct": 2,
+    "explanation": "Pasmo 10 m dla służby amatorskiej to 28000-29700 kHz (28-29,7 MHz)."
+  },
+  {
+    "id": 35,
+    "category": "",
+    "question": "Zakres częstotliwości przeznaczony dla służby amatorskiej w paśmie 6 m to:",
+    "answers": ["50 MHz - 54 MHz", "50 MHz - 52 MHz", "50 MHz - 53,5 MHz"],
+    "correct": 1,
+    "explanation": "W Polsce pasmo 6 m to 50-52 MHz. Zakres 50-54 MHz obowiązuje m.in. w USA, a wariant z 53,5 MHz to dystraktor."
+  },
+  {
+    "id": 36,
+    "category": "",
+    "question": "Jaki jest odstęp między częstotliwością nadawczą a odbiorczą przemienników pracujących w paśmie 2 m?",
+    "answers": ["600 kHz", "650 kHz", "800 kHz"],
+    "correct": 0,
+    "explanation": "Przemienniki na 2 m pracują z odstępem (shiftem) 600 kHz. Na 70 cm w Europie jest to 7,6 MHz. Pozostałe wartości to dystraktory."
+  },
+  {
+    "id": 37,
+    "category": "",
+    "question": "Który z prefiksów nie może być prefiksem znaku wywoławczego stacji polskiego krótkofalowca dla kategorii pozwolenia 1 i 3?",
+    "answers": ["HF", "3Z", "SR"],
+    "correct": 2,
+    "explanation": "Prefiks SR jest używany dla stacji bezobsługowych (kategoria 5, np. przemienniki, beacony), a nie dla stacji operatorów z kategorią 1 i 3. HF i 3Z to polskie prefiksy okolicznościowe."
+  },
+  {
+    "id": 38,
+    "category": "",
+    "question": "Który z prefiksów dotyczy krótkofalowca z Ameryki Północnej?",
+    "answers": ["W", "BY", "G"],
+    "correct": 0,
+    "explanation": "Prefiks W (a także K, N, AA-AL) należy do USA, czyli do Ameryki Północnej. BY to Chiny, a G to Anglia (Wielka Brytania)."
+  }
+]
