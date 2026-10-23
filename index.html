@@ -28,10 +28,16 @@ button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .bx.n .bar i{background:var(--blue)}
 .bx.m .bar i{background:var(--ok)}
 .bx small{color:var(--mute);font-size:.72rem}
+.cat{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0;min-height:56px}
+.cat b{display:block;margin-bottom:8px;line-height:1.3}
+.cb{display:flex;height:10px;background:var(--bg);border-radius:5px;overflow:hidden}
+.cb i{display:block;height:100%}.cb .g{background:var(--ok)}.cb .a{background:var(--amber)}
+.cm{display:flex;justify-content:space-between;gap:8px;color:var(--mute);font-size:.85rem;margin-top:8px}
 .note{color:var(--mute);margin:6px 2px}
 .top{display:flex;justify-content:space-between;align-items:center;color:var(--mute);margin-bottom:14px}
 .top button{background:none;border:0;color:var(--mute);padding:10px 4px;font-size:1rem}
 .q{font:1.28rem/1.4 Georgia,"Iowan Old Style",serif;margin:6px 0 20px}
+.qimg{display:block;max-width:100%;max-height:300px;margin:0 auto 18px;border-radius:10px;background:#fff;object-fit:contain}
 .opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;margin:10px 0;min-height:56px}
 .opt span.l{flex:none;width:28px;height:28px;border-radius:50%;background:var(--blue-t);color:var(--blue);font-weight:700;display:grid;place-items:center;font-size:.9rem}
 .opt.ok{border-color:var(--ok);background:var(--ok-t)}
@@ -56,9 +62,10 @@ const WAIT=[10,1440,2880,4320];   // 10 min, 1 dzień, 2 dni, 3 dni
 const WRONG_WAIT=10;              // po błędzie: pudełko 1, powtórka za 10 min
 const REQUEUE_AFTER=3;            // błędne pytanie wraca w tej samej sesji po 3 innych
 const EXTRA_ROUND=10;             // rozmiar dodatkowej rundy
+const SESSION_MAX=20;             // maks. pytań w jednej rundzie nauki
 // ----------------------------------------------------------------------------------------
-const KEY='fiszki-v1',app=document.getElementById('app');
-let Q=[],S=load(),queue=[],cur=null,order=[],ans=null,sess={ok:0,bad:0},fb=null;
+const KEY='fiszki-v2',app=document.getElementById('app');
+let Q=[],CATS=[],S=load(),queue=[],cur=null,order=[],ans=null,sess={ok:0,bad:0},fb=null;
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.p)return s}catch(e){}return{p:{},log:{}}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -69,7 +76,10 @@ function dueIds(){const now=Date.now(),over=[],fresh=[];for(const q of Q){const 
 function nextDue(){const now=Date.now();let m=Infinity;for(const id in S.p)if(S.p[id].d>now)m=Math.min(m,S.p[id].d);return m}
 function wrongIds(){return Q.filter(q=>S.p[q.id]&&S.p[q.id].w>0).sort((a,b)=>S.p[b.id].w-S.p[a.id].w).map(q=>q.id)}
 function extraIds(){return Q.map(q=>q.id).sort((a,b)=>((S.p[a]?S.p[a].b+1:0)-(S.p[b]?S.p[b].b+1:0))||Math.random()-.5).slice(0,EXTRA_ROUND)}
-function start(ids){if(!ids.length)return;queue=ids.slice();sess={ok:0,bad:0};next()}
+const cat=q=>q.category||'Inne';
+function startCat(i){const n=CATS[i];let ids=dueIds().filter(id=>cat(Q.find(q=>q.id===id))===n);
+ if(!ids.length)ids=Q.filter(q=>cat(q)===n).map(q=>q.id).sort((a,b)=>((S.p[a]?S.p[a].b+1:0)-(S.p[b]?S.p[b].b+1:0))||Math.random()-.5).slice(0,EXTRA_ROUND);start(ids)}
+function start(ids,all){if(!ids.length)return;queue=all?ids.slice():ids.slice(0,SESSION_MAX);sess={ok:0,bad:0};next()}
 function next(){if(!queue.length){done();return}const id=queue.shift();cur=Q.find(q=>q.id===id);order=shuffle(cur.answers.map((_,i)=>i));ans=null;fb=null;question()}
 function pick(i){if(ans!==null)return;ans=i;const ok=order[i]===cur.correct;const p=S.p[cur.id]||{b:0,d:0,w:0,n:0};p.n++;let wait,msg;
  if(ok){wait=WAIT[p.b];p.b=Math.min(3,p.b+1);sess.ok++;msg='Pudełko '+(p.b+1)+', powtórka za '+fmt(wait)}
@@ -77,7 +87,7 @@ function pick(i){if(ans!==null)return;ans=i;const ok=order[i]===cur.correct;cons
  p.d=Date.now()+wait*60000;S.p[cur.id]=p;const l=S.log[day()]||(S.log[day()]={ok:0,bad:0});ok?l.ok++:l.bad++;save();fb={ok,msg};question()}
 function question(){const L='ABC';
  app.innerHTML=`<div class="top"><span>Zostało: ${queue.length+(ans===null?1:0)}</span><button onclick="home()">Zakończ</button></div>
- <p class="q">${esc(cur.question)}</p>
+ <p class="q">${esc(cur.question)}</p>${cur.image?`<img class="qimg" src="${esc(cur.image)}" alt="Rysunek do pytania">`:''}
  ${order.map((o,i)=>{let c='opt';if(ans!==null){if(o===cur.correct)c+=' ok';else if(i===ans)c+=' bad'}
  return `<button class="${c}" ${ans!==null?'disabled':''} onclick="pick(${i})"><span class="l">${L[i]}</span><span>${esc(cur.answers[o])}</span></button>`}).join('')}
  ${fb?`<div class="fb ${fb.ok?'ok':'bad'}"><h2>${fb.ok?'Dobrze':'Źle. Poprawna odpowiedź: '+L[order.indexOf(cur.correct)]}</h2><p>${esc(cur.explanation||'')}</p><p class="sch">${esc(fb.msg)}</p></div><div class="sticky"><button class="btn" onclick="next()">Dalej</button></div>`:''}`;
@@ -89,8 +99,9 @@ function home(){const total=Q.length,c=[0,0,0,0];let nw=0;for(const q of Q){cons
  const cell=(n,lab,cls)=>`<div class="bx ${cls}"><b>${n}</b><div class="bar"><i style="height:${total?100*n/total:0}%"></i></div><small>${lab}</small></div>`;
  app.innerHTML=`<h1>Fiszki</h1>
  <div class="boxes">${cell(nw,'Nowe','n')}${cell(c[0],'Pud. 1','')}${cell(c[1],'Pud. 2','')}${cell(c[2],'Pud. 3','')}${cell(c[3],'Pud. 4','m')}</div>
- ${d.length?`<button class="btn" onclick="start(dueIds())">Ucz się (${d.length})</button>`
+ ${d.length?`<button class="btn" onclick="start(dueIds())">Ucz się: wszystkie działy (${d.length>SESSION_MAX?SESSION_MAX+' z '+d.length:d.length})</button>`
  :`<p class="note">Na teraz wszystko zrobione.${nd<Infinity?' Następna powtórka za '+fmt(Math.max(1,Math.round((nd-Date.now())/60000)))+'.':''}</p>`}
+ <p class="note" style="margin-top:18px">Działy: zielony pasek to pytania opanowane (pudełka 3-4), żółty to pytania w nauce.</p>${catRows(d)}
  <button class="btn alt" onclick="start(extraIds())">Dodatkowa runda (${Math.min(EXTRA_ROUND,total)})</button>
  ${w.length?`<button class="btn alt" onclick="start(wrongIds())">Powtórz błędne (${w.length})</button>`:''}
  <p class="note">${lt?`Dziś: ${lt} odpowiedzi, ${Math.round(100*l.ok/lt)}% poprawnych.`:'Dziś jeszcze bez odpowiedzi.'}</p>
@@ -99,10 +110,22 @@ function home(){const total=Q.length,c=[0,0,0,0];let nw=0;for(const q of Q){cons
  <button class="btn alt" onclick="document.getElementById('f').click()">Wczytaj postępy z pliku</button>
  <input id="f" type="file" accept="application/json,.json" hidden onchange="imp(this)">
  <button class="btn alt" onclick="reset()">Wyzeruj postępy</button></details>`}
+function catView(i){const n=CATS[i],qs=Q.filter(q=>cat(q)===n),ds=new Set(dueIds());let m=0,a=0,due=0,wr=0;
+ for(const q of qs){const p=S.p[q.id];if(p){p.b>=2?m++:a++;if(p.w>0)wr++}if(ds.has(q.id))due++}const t=qs.length;
+ app.innerHTML=`<div class="top"><button onclick="home()">Wróć</button><span></span></div><h1 style="font-size:1.35rem">${esc(n)}</h1>
+ <span class="cb"><i class="g" style="width:${100*m/t}%"></i><i class="a" style="width:${100*a/t}%"></i></span>
+ <div class="cm"><span>${t} pytań</span><span>${Math.round(100*m/t)}% opanowane</span></div>
+ ${due?`<button class="btn" onclick="startCat(${i})">Ucz się według planu (${due>SESSION_MAX?SESSION_MAX+' z '+due:due})</button>`:`<p class="note">Według planu nic na dziś nie czeka.</p>`}
+ <button class="btn ${due?'alt':''}" onclick="startAll(${i})">Wszystkie pytania z działu (${t})</button>
+ ${wr?`<button class="btn alt" onclick="startWrong(${i})">Tylko błędne z działu (${wr})</button>`:''}`}
+function startAll(i){start(shuffle(Q.filter(q=>cat(q)===CATS[i]).map(q=>q.id)),true)}
+function startWrong(i){start(Q.filter(q=>cat(q)===CATS[i]&&S.p[q.id]&&S.p[q.id].w>0).map(q=>q.id),true)}
+function catRows(d){const ds=new Set(d);return CATS.map((n,i)=>{const qs=Q.filter(q=>cat(q)===n);let m=0,a=0,due=0;for(const q of qs){const p=S.p[q.id];if(p){p.b>=2?m++:a++}if(ds.has(q.id))due++}const t=qs.length;
+ return `<button class="cat" onclick="catView(${i})"><b>${esc(n)}</b><span class="cb"><i class="g" style="width:${100*m/t}%"></i><i class="a" style="width:${100*a/t}%"></i></span><span class="cm"><span>${t} pytań, ${due?due+' do nauki':'na dziś zrobione'}</span><span>${Math.round(100*m/t)}% opanowane</span></span></button>`}).join('')}
 function exp(){const b=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='fiszki-postepy-'+day()+'.json';document.body.appendChild(a);a.click();a.remove()}
 function imp(el){const f=el.files[0];if(!f)return;f.text().then(t=>{const s=JSON.parse(t);if(!s||typeof s.p!=='object')throw 0;if(!confirm('Zastąpić obecne postępy wczytanymi?'))return;S={p:s.p,log:s.log||{}};save();home()}).catch(()=>alert('Nie udało się wczytać pliku z postępami.'))}
 function reset(){if(confirm('Na pewno wyzerować wszystkie postępy?')){S={p:{},log:{}};save();home()}}
-fetch('pytania.json').then(r=>r.json()).then(j=>{Q=j;home()}).catch(()=>{app.innerHTML='<h1>Fiszki</h1><p class="note">Nie udało się wczytać pliku pytania.json. Sprawdź, czy leży obok index.html i otwórz stronę ponownie z internetem.</p>'});
+fetch('pytania.json').then(r=>r.json()).then(j=>{Q=j;CATS=[...new Set(Q.map(cat))];home();Q.forEach(q=>{if(q.image)fetch(q.image).catch(()=>{})})}).catch(()=>{app.innerHTML='<h1>Fiszki</h1><p class="note">Nie udało się wczytać pliku pytania.json. Sprawdź, czy leży obok index.html i otwórz stronę ponownie z internetem.</p>'});
 if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(()=>{});
 </script></body></html>
